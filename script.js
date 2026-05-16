@@ -28,6 +28,10 @@ async function getDashboardData(query) {
 getDashboardData('london')
   .then((data) => {
     console.log('Dashboard Data', data);
-    console.log(`${data.cityName}`);
+    console.log(
+      `La città che hai cercato è ${data.cityName}, si trova in ${data.cityCountry}.\n` +
+        `Oggi la temperatura è di ${data.cityTemperature} gradi, ed il tempo è ${data.cityWeather}.\n` +
+        `L'aereoporto principale è ${data.cityAirport}`,
+    );
   })
   .catch((error) => console.error(error));
