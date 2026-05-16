@@ -1,8 +1,17 @@
 async function getDashboardData(query) {
   //Chiamata Destinazione API
-  const response = await fetch(
-    `http://localhost:3333/destinations?search=${query}`,
-  );
+
+  //Promise
+  const [responseDestination, responseMeteo, responseAirports] =
+    await Promise.all([
+      fetch(`http://localhost:3333/destinations?search=${query}`),
+      fetch(`http://localhost:3333/weathers?search=${query}`),
+      fetch(`http://localhost:3333/airports?search=${query}`),
+    ]);
+
+  //   const response = await fetch(
+  //     `http://localhost:3333/destinations?search=${query}`,
+  //   );
 
   //Array
   const destinationData = await response.json();
@@ -13,10 +22,10 @@ async function getDashboardData(query) {
   //Country
   const countryOfDestination = destinationData[0].country;
 
-  //Chiamata Meteo API
-  const responseMeteo = await fetch(
-    `http://localhost:3333/weathers?search=${query}`,
-  );
+  //   //Chiamata Meteo API
+  //   const responseMeteo = await fetch(
+  //     `http://localhost:3333/weathers?search=${query}`,
+  //   );
 
   //Array
   const dataMeteo = await responseMeteo.json();
@@ -47,9 +56,9 @@ async function getDashboardData(query) {
   };
 }
 
-getDashboardData('london')
-  .then((data) => {
-    console.log('Dashboard Data', data);
-    console.log(`${data.cityName}`);
-  })
-  .catch((error) => console.error(error));
+// getDashboardData('london')
+//   .then((data) => {
+//     console.log('Dashboard Data', data);
+//     console.log(`${data.cityName}`);
+//   })
+//   .catch((error) => console.error(error));
