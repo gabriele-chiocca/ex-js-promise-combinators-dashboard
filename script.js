@@ -1,4 +1,5 @@
 async function getDashboardData(query) {
+  //Chiamata Destinazione API
   const response = await fetch(
     `http://localhost:3333/destinations?search=${query}`,
   );
@@ -12,7 +13,7 @@ async function getDashboardData(query) {
   //Country
   const countryOfDestination = destinationData[0].country;
 
-  //Meteo
+  //Chiamata Meteo API
   const responseMeteo = await fetch(
     `http://localhost:3333/weathers?search=${query}`,
   );
@@ -25,6 +26,30 @@ async function getDashboardData(query) {
 
   //Descrizione Tempo
   const weatherDescription = dataMeteo[0].weather_description;
+
+  //Chiamata Aereoporto API
+  const responseAirports = await fetch(
+    `http://localhost:3333/airports?search=${query}`,
+  );
+
+  //Array
+  const dataAirports = await responseAirports.json();
+
+  //Aereoporto principale
+  const principalAirport = dataAirports[0].name;
+
+  return {
+    cityName: nameOfDestination,
+    cityCountry: countryOfDestination,
+    cityTemperature: temperatureOfCity,
+    cityWeather: weatherDescription,
+    cityAirport: principalAirport,
+  };
 }
 
-getDashboardData('london');
+getDashboardData('london')
+  .then((data) => {
+    console.log('Dashboard Data', data);
+    console.log(`${data.cityName}`);
+  })
+  .catch((error) => console.error(error));
