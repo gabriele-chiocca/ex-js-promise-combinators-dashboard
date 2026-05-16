@@ -9,56 +9,25 @@ async function getDashboardData(query) {
       fetch(`http://localhost:3333/airports?search=${query}`),
     ]);
 
-  //   const response = await fetch(
-  //     `http://localhost:3333/destinations?search=${query}`,
-  //   );
-
-  //Array
-  const destinationData = await response.json();
-
-  //Nome Città
-  const nameOfDestination = destinationData[0].name;
-
-  //Country
-  const countryOfDestination = destinationData[0].country;
-
-  //   //Chiamata Meteo API
-  //   const responseMeteo = await fetch(
-  //     `http://localhost:3333/weathers?search=${query}`,
-  //   );
-
-  //Array
-  const dataMeteo = await responseMeteo.json();
-
-  //Temperatura
-  const temperatureOfCity = dataMeteo[0].temperature;
-
-  //Descrizione Tempo
-  const weatherDescription = dataMeteo[0].weather_description;
-
-  //Chiamata Aereoporto API
-  const responseAirports = await fetch(
-    `http://localhost:3333/airports?search=${query}`,
-  );
-
-  //Array
-  const dataAirports = await responseAirports.json();
-
-  //Aereoporto principale
-  const principalAirport = dataAirports[0].name;
+  //Risposte Array
+  const [destinationData, dataMeteo, dataAirports] = await Promise.all([
+    responseDestination.json(),
+    responseMeteo.json(),
+    responseAirports.json(),
+  ]);
 
   return {
-    cityName: nameOfDestination,
-    cityCountry: countryOfDestination,
-    cityTemperature: temperatureOfCity,
-    cityWeather: weatherDescription,
-    cityAirport: principalAirport,
+    cityName: destinationData[0].name,
+    cityCountry: destinationData[0].country,
+    cityTemperature: dataMeteo[0].temperature,
+    cityWeather: dataMeteo[0].weather_description,
+    cityAirport: dataAirports[0].name,
   };
 }
 
-// getDashboardData('london')
-//   .then((data) => {
-//     console.log('Dashboard Data', data);
-//     console.log(`${data.cityName}`);
-//   })
-//   .catch((error) => console.error(error));
+getDashboardData('london')
+  .then((data) => {
+    console.log('Dashboard Data', data);
+    console.log(`${data.cityName}`);
+  })
+  .catch((error) => console.error(error));
